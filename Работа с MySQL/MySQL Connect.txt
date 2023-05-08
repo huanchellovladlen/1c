@@ -1,0 +1,59 @@
+//////////////////////////////////////////////////////////////////////
+
+Версия MySQL сревера:		5.7.34
+Версия драйвера ODBC:		8.0.26
+Имя базы данных:		testmodle
+
+Connection Method:		Standart TCP/IP over SSH
+SSH Hostname:			10.1.1.17
+SSH Port:			22
+SSH Username:			umroot
+SSH Password:			dfi87#*JDdfK8$$M9kd
+
+MySQL Hostname:			localhost
+MySQL Port:			3306
+MySQL Username:			reiko-remote
+MySQL Password:			4$fgJh7h80YT$d!dsKy
+
+//////////////////////////////////////////////////////////////////////
+https://www.devart.com/odbc/mysql/
+https://putty.org.ru/articles/putty-ssh-tunnels.html
+????????
+
+
+
+Через таблицу mdl_grade_items можно связать mdl_grade_grades с mdl_course, чтобы узнать название теста.
+Имена студентов можно узнать в таблице mdl_users.
+Пользователи будет состоять в группах. Узнать группу студента можно в таблице mdl_cohort_members. В таблице mdl_cohort хранятся названия групп.
+
+
+Итак. (все запросы протестированы в субд)
+
+1) Получим список групп студентов
+
+SELECT id,`name`
+FROM mdl_cohort
+
+2) Получим список id студентов группы
+
+SELECT userid
+FROM mdl_cohort_members
+WHERE cohortid = ?
+
+3) получим список тестов (category = 2. Это курсы, которые являются тестами)
+
+SELECT id, fullname
+FROM mdl_course
+WHERE category=2
+
+4) Запрос даёт всех пользователей со всеми оценками по всем тестам. Но мы можем его отфильтровать с помощью двух запросов
+AND gg.userid WHERE IN (список id студентов через запятую) (пункт 2)
+AND gi.courseid = выбранный id теста (пункт 3)
+
+SELECT gg.userid as studentid, gg.finalgrade AS studentgrade, 
+u.lastname, u.firstname
+FROM mdl_grade_grades AS gg 
+INNER JOIN mdl_grade_items as gi 
+On gg.itemid = gi.id 
+INNER JOIN mdl_user AS u
+ON gg.userid = u.id
