@@ -1,4 +1,3 @@
-
 #Область Работа_С_MySQL
 // Полезные ссылки:
 // 	ADODB.Command for update, dalete and other
@@ -61,10 +60,10 @@
 	Для КолОшибок = 0 По 5 Цикл
 		Попытка	 
 			Connection.Open("DRIVER={MySQL ODBC 8.0 Unicode Driver};
-		                   |SERVER=localhost;
-		                   |DATABASE=testmoodle;
-						   |USER=reiko-remote;
-		                   |PASSWORD=4$fgJh7h80YT$d!dsKy;");
+				|SERVER=localhost;
+				|DATABASE=testmoodle;
+				|USER=reiko-remote;
+				|PASSWORD=4$fgJh7h80YT$d!dsKy;");
 		Исключение
 			Если КолОшибок > 4 Тогда
 				Сообщить(КраткоеПредставлениеОшибки(ИнформацияОбОшибке()));
